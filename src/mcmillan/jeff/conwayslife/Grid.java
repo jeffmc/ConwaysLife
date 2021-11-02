@@ -19,7 +19,7 @@ public class Grid {
 	}
 	
 	public void print() {
-		System.out.println("/-------------------------\\");
+		System.out.print("\n/-------------------------\\\n");
 		for (int y=0;y<height;y++) {
 			System.out.print("|");
 			for (int x=0;x<width;x++) {
@@ -27,7 +27,8 @@ public class Grid {
 			}
 			System.out.print("|\n");
 		}
-		System.out.println("\\-------------------------/");
+		System.out.println("\\-------------------------/\n");
+		
 	}
 	
 }
