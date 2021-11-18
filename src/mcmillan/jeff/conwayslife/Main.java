@@ -1,6 +1,6 @@
 package mcmillan.jeff.conwayslife;
 
-import java.util.Scanner;
+import java.awt.BorderLayout;
 
 import javax.swing.JFrame;
 
@@ -11,19 +11,12 @@ public class Main {
 	public static void main(String args[]) {
 		beginWindow();
 		
-		Grid game = new Grid(25,25);
-		window.add(game);
-		
+		Grid grid = new Grid(25,25);
+		window.add(grid, BorderLayout.CENTER);
+		ControlPanel controlPanel = new ControlPanel(grid);
+		window.add(controlPanel, BorderLayout.PAGE_END);
+
 		finishWindow();
-		
-		Scanner console = new Scanner(System.in);
-		while (true) { // TODO: Add GUI functionality.
-			if (console.nextLine().trim().toLowerCase().length()>3) break;
-			game.stepField();
-		}
-		System.out.println("Exited!");
-		console.close();
-		System.exit(0);
 	}
 	
 	private static void beginWindow() {
