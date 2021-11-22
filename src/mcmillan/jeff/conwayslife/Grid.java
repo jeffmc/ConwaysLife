@@ -14,11 +14,11 @@ public class Grid extends JPanel {
 	public boolean[][] field;
 	private int fieldWidth, fieldHeight;
 	
-	public Grid(int w, int h) {
+	public Grid(int w, int h, int preferredHeightPx) {
 		super();
-		setupGUI();
 		fieldWidth = w;
 		fieldHeight = h;
+		setupGUI(preferredHeightPx);
 		restartGrid(GenerationType.Random);
 	}
 	
@@ -54,8 +54,9 @@ public class Grid extends JPanel {
 		}
 	}
 	
-	private void setupGUI() {
-		this.setPreferredSize(new Dimension(400, 400));
+	private void setupGUI(int preferredHeightPx) {
+		float ar = fieldWidth / fieldHeight;
+		this.setPreferredSize(new Dimension((int)Math.ceil(preferredHeightPx*ar), preferredHeightPx));
 		this.addMouseListener(new MouseListener() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -162,7 +163,7 @@ public class Grid extends JPanel {
 	private void drawCells(Graphics g, int w, int h) {
 		g.setColor(Color.RED);
 		int colPx = Math.floorDiv(w, fieldWidth);
-		int rowPx = Math.floorDiv(w, fieldHeight);
+		int rowPx = Math.floorDiv(h, fieldHeight);
 		for (int y=0;y<fieldHeight;y++) {
 			for (int x=0;x<fieldWidth;x++) {
 				if (field[x][y]) {
@@ -178,9 +179,9 @@ public class Grid extends JPanel {
 		for (int x=1;x<fieldWidth;x++) {
 			g.drawLine(x*colPx, 0, x*colPx, h);
 		}
-		int rowPx = Math.floorDiv(w, fieldHeight);
+		int rowPx = Math.floorDiv(h, fieldHeight);
 		for (int y=1;y<fieldHeight;y++) {
-			g.drawLine(0, y*rowPx, h, y*rowPx);
+			g.drawLine(0, y*rowPx, w, y*rowPx);
 		}
 	}
 	

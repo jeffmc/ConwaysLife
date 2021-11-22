@@ -22,6 +22,9 @@ public class ControlPanel extends JPanel {
 	
 	private static final String START = "Start";
 	private static final String STOP = "Stop";
+	
+	private static final long MS_PER_FRAME = 250;
+	
 	private Grid grid;
 	
 	public ControlPanel(Grid g) {
@@ -70,7 +73,7 @@ public class ControlPanel extends JPanel {
 							autoStepping.set(true);
 							long lastStep = System.currentTimeMillis();
 							while (autoStepping.get()) {
-								if (System.currentTimeMillis()-lastStep > 100) {
+								if (System.currentTimeMillis()-lastStep > MS_PER_FRAME) {
 									lastStep = System.currentTimeMillis();
 									grid.stepField();
 								}

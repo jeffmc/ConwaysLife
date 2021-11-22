@@ -11,7 +11,7 @@ public class Main {
 	public static void main(String args[]) {
 		beginWindow();
 		
-		Grid grid = new Grid(25,25);
+		Grid grid = new Grid(30,30,600); // JFrame size will max out at display height
 		window.add(grid, BorderLayout.CENTER);
 		ControlPanel controlPanel = new ControlPanel(grid);
 		window.add(controlPanel, BorderLayout.PAGE_END);
