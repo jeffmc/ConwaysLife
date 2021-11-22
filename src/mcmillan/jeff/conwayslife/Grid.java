@@ -9,20 +9,28 @@ import java.util.Random;
 
 import javax.swing.JPanel;
 
+// The Grid class manages all data and logic between cells/neighbors in the Game of Life field,
+// stepField(), toggleCell(), and restartGrid() are all the most needed methods in this class.
+
 @SuppressWarnings("serial")
 public class Grid extends JPanel {
-	public boolean[][] field;
-	private int fieldWidth, fieldHeight;
+	public boolean[][] field; // 2-dimensional boolean array for holding the state of each cell.
+	private int fieldWidth, fieldHeight; // Dimensions of the field
 	
-	public Grid(int w, int h, int preferredHeightPx) {
-		super();
+	// fieldWidth, fieldHeight, panel's preferred height in pixels, and initial generation mode.
+	public Grid(int w, int h, int preferredHeightPx, GenerationMode mode) {
+		super(); // Call default JPanel constructor
+		
+		// Set fields using parameters
 		fieldWidth = w;
 		fieldHeight = h;
+		
 		setupGUI(preferredHeightPx);
-		restartGrid(GenerationType.Random);
+		restartGrid(mode);
 	}
 	
-	public void restartGrid(GenerationType mode) { // Generate grid and repaint
+	// Generate grid based on mode and repaint
+	public void restartGrid(GenerationMode mode) {
 		switch (mode) {
 		default:
 		case Clear:
@@ -34,7 +42,8 @@ public class Grid extends JPanel {
 		}
 		repaint();
 	}
-	
+
+	// Generates a randomized (50/50) array in field
 	private void generateRandomField() {
 		Random rand = new Random();
 		field = new boolean[fieldWidth][fieldHeight];
@@ -45,6 +54,7 @@ public class Grid extends JPanel {
 		}
 	}
 	
+	// Generates an empty (false) array in field
 	private void generateClearField() {
 		field = new boolean[fieldWidth][fieldHeight];
 		for (int y=0;y<fieldHeight;y++) {
@@ -54,6 +64,7 @@ public class Grid extends JPanel {
 		}
 	}
 	
+	// Determines dimensions of JPanel in pixels to maintain correct aspect ratio and adds listener for mouse events.
 	private void setupGUI(int preferredHeightPx) {
 		float ar = fieldWidth / fieldHeight;
 		this.setPreferredSize(new Dimension((int)Math.ceil(preferredHeightPx*ar), preferredHeightPx));
@@ -78,7 +89,8 @@ public class Grid extends JPanel {
 		});
 	}
 	
-	public void stepField() { // Steps each cell and repaints panel
+	// Steps all cells once and repaints panel once finished
+	public void stepField() {
 		boolean[][] nextField = new boolean[fieldWidth][fieldHeight];
 		for (int y=0;y<fieldHeight;y++) {
 			for (int x=0;x<fieldWidth;x++) {
@@ -89,7 +101,8 @@ public class Grid extends JPanel {
 		repaint();
 	}
 	
-	 private boolean stepCell(int x, int y) { // Returns boolean for state of this cell in next frame.
+	// Returns future state of this cell to be set in stepField, non-destructive method.
+	private boolean stepCell(int x, int y) {
 	    // If alive
 	    //   0 or 1 neighbors - dies of loneliness
 	    //   2 or 3 neighbors - survives to next round
@@ -125,19 +138,22 @@ public class Grid extends JPanel {
 	    return nextState;
     };
 	
-    public void toggleCell(int x, int y) { // Toggles a cell and repaints panel
+    // Toggles a cell at field coordinates and repaints panel
+    public void toggleCell(int x, int y) {
     	if (x >= fieldWidth || y >= fieldHeight || x < 0 || y < 0) throw new IllegalArgumentException("Cell out of field bounds: [" + x + ", " + y + "]");
     	field[x][y] = !field[x][y];
     	repaint();
     }
     
-    public void toggleCellFromMouse(int mx, int my) { // Converts mouse coords to field coords and calls toggleCell
+    // Converts mouse coordinates to field coordinates and calls toggleCell
+    public void toggleCellFromMouse(int mx, int my) {
     	toggleCell(Math.floorDiv(mx, Math.floorDiv(getWidth(), fieldWidth)),
     			Math.floorDiv(my, Math.floorDiv(getHeight(), fieldHeight)));
     }
     
+    // Prints the state of field into console. (Borders only look correct with 25x? field and monospaced font. )
     @Deprecated
-	public void print() { // Only looks correct with 25x25
+	public void print() {
 		System.out.print("\n/-------------------------\\\n");
 		for (int y=0;y<fieldHeight;y++) {
 			System.out.print("|");
@@ -150,16 +166,25 @@ public class Grid extends JPanel {
 		
 	}
 	
+    // Override the default JPanel paintComponent method to draw our grid lines and cell states.
+    @Override
 	public void paintComponent(Graphics g) {
-		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, getWidth(), getHeight());
+		
+		// Get panel width and height in pixels.
 		int width = getWidth();
 		int height = getHeight();
+		
+		// Draw background
+		g.setColor(Color.WHITE);
+		g.fillRect(0, 0, width, height);
+		
+		// Draw game components
 		drawCells(g,width,height);
 		drawLines(g,width,height);
-//		print();
+//		print(); // Used in early-stages and debugging to print field state to console.
 	}
 
+    // Draw the state of each cell in field.
 	private void drawCells(Graphics g, int w, int h) {
 		g.setColor(Color.RED);
 		int colPx = Math.floorDiv(w, fieldWidth);
@@ -172,7 +197,8 @@ public class Grid extends JPanel {
 			}
 		}
 	}
-	
+
+    // Draw the grid lines.
 	private void drawLines(Graphics g, int w, int h) {
 		g.setColor(Color.BLACK);
 		int colPx = Math.floorDiv(w, fieldWidth);
@@ -185,8 +211,9 @@ public class Grid extends JPanel {
 		}
 	}
 	
-	public enum GenerationType {
-		Random, Clear;
+	// Field generation modes.
+	public enum GenerationMode {
+		Random, Clear; // TODO: Add a threshold value to random.
 	}
 	
 }

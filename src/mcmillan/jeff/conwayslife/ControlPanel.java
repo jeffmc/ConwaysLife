@@ -7,22 +7,31 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import mcmillan.jeff.conwayslife.Grid.GenerationType;
+import mcmillan.jeff.conwayslife.Grid.GenerationMode;
+
+// The ControlPanel class handles all logic outside of the Conways Game of Life neighbor rules, 
+// this includes single-stepping, starting/stopping the auto-stepping, and triggering field regeneration.
 
 @SuppressWarnings("serial")
 public class ControlPanel extends JPanel {
+
+	// Step button
 	private JButton stepBtn;
 	
+	// Looping
 	private JButton loopBtn;
 	private AtomicBoolean autoStepping;
 	private Thread loopThread;
 	
+	// Field-generation buttons
 	private JButton randomizeBtn;
 	private JButton clearBtn;
 	
+	// Constant strings
 	private static final String START_STR = "Start";
 	private static final String STOP_STR = "Stop";
 	
+	// Milliseconds per frame
 	private static final long MS_PER_FRAME = 250;
 	
 	private Grid grid;
@@ -45,11 +54,11 @@ public class ControlPanel extends JPanel {
 		setupLoopingBtn();
 		
 		// Randomize button
-		randomizeBtn = makeRestartGridBtn("Randomize", GenerationType.Random);
+		randomizeBtn = makeRestartGridBtn("Randomize", GenerationMode.Random);
 		add(randomizeBtn);
 		
 		// Clear button
-		clearBtn = makeRestartGridBtn("Clear", GenerationType.Clear);
+		clearBtn = makeRestartGridBtn("Clear", GenerationMode.Clear);
 		add(clearBtn);
 	}
 	
@@ -84,7 +93,7 @@ public class ControlPanel extends JPanel {
 		});
 	}
 	
-	private JButton makeRestartGridBtn(String label, Grid.GenerationType mode) {
+	private JButton makeRestartGridBtn(String label, Grid.GenerationMode mode) {
 		JButton btn = new JButton(label);
 		btn.addActionListener(new ActionListener() {
 			@Override
