@@ -34,6 +34,7 @@ public class ControlPanel extends JPanel {
 	// Milliseconds per frame
 	private static final long MS_PER_FRAME = 250;
 	
+	// Reference to the grid which this controls.
 	private Grid grid;
 	
 	// ControlPanel contains the step, start/stop, randomize, clear buttons and manages the loop.
@@ -62,6 +63,7 @@ public class ControlPanel extends JPanel {
 		add(clearBtn);
 	}
 	
+	// Makes JButton and adds listener using AtomicBoolean to control looping thread.
 	private void setupLoopingBtn() {
 		autoStepping = new AtomicBoolean(false);
 		loopBtn = new JButton(START_STR);
@@ -93,6 +95,7 @@ public class ControlPanel extends JPanel {
 		});
 	}
 	
+	// Helper method to quickly make a JButton with a label and triggers the grid to regenerate using mode.
 	private JButton makeRestartGridBtn(String label, Grid.GenerationMode mode) {
 		JButton btn = new JButton(label);
 		btn.addActionListener(new ActionListener() {
