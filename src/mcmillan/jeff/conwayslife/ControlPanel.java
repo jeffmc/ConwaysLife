@@ -20,16 +20,19 @@ public class ControlPanel extends JPanel {
 	private JButton randomizeBtn;
 	private JButton clearBtn;
 	
-	private static final String START = "Start";
-	private static final String STOP = "Stop";
+	private static final String START_STR = "Start";
+	private static final String STOP_STR = "Stop";
 	
 	private static final long MS_PER_FRAME = 250;
 	
 	private Grid grid;
 	
+	// ControlPanel contains the step, start/stop, randomize, clear buttons and manages the loop.
 	public ControlPanel(Grid g) {
 		super();
 		grid = g;
+		
+		// Single-step button
 		stepBtn = new JButton("Step");
 		this.add(stepBtn);
 		stepBtn.addActionListener(new ActionListener() {
@@ -38,29 +41,21 @@ public class ControlPanel extends JPanel {
 				grid.stepField();
 			}
 		});
+		
 		setupLoopingBtn();
 		
-		randomizeBtn = new JButton("Randomize");
-		randomizeBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				grid.restartGrid(GenerationType.Random);
-			}
-		});
+		// Randomize button
+		randomizeBtn = makeRestartGridBtn("Randomize", GenerationType.Random);
 		add(randomizeBtn);
-		clearBtn = new JButton("Clear");
-		clearBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				grid.restartGrid(GenerationType.Clear);
-			}
-		});
+		
+		// Clear button
+		clearBtn = makeRestartGridBtn("Clear", GenerationType.Clear);
 		add(clearBtn);
 	}
 	
 	private void setupLoopingBtn() {
 		autoStepping = new AtomicBoolean(false);
-		loopBtn = new JButton(START);
+		loopBtn = new JButton(START_STR);
 		add(loopBtn);
 		loopBtn.addActionListener(new ActionListener() {
 			@Override
@@ -84,8 +79,19 @@ public class ControlPanel extends JPanel {
 				} else {
 					autoStepping.set(false);
 				}
-				loopBtn.setText(autoStepping.get()?STOP:START);
+				loopBtn.setText(autoStepping.get()?STOP_STR:START_STR);
 			}
 		});
+	}
+	
+	private JButton makeRestartGridBtn(String label, Grid.GenerationType mode) {
+		JButton btn = new JButton(label);
+		btn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				grid.restartGrid(mode);
+			}
+		});
+		return btn;
 	}
 }
