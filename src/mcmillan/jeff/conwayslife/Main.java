@@ -6,6 +6,10 @@ import javax.swing.JFrame;
 
 import mcmillan.jeff.conwayslife.Grid.GenerationMode;
 
+// This project is an implementation of Conway's Game of Life with GUI.
+// Features: Auto-stepping, single-stepping, randomizing.
+// Jeff McMillan, 11-29-21
+
 // Entry point into game. 
 // Combines ControlPanel and Grid instances into a window and presents to user.
 
